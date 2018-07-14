@@ -24,10 +24,11 @@
         credentials: 'include',
         headers: {
           'csrf-token': csrf,
-          'Content-Type': 'x-www-form-urlencoded',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
       }).then(data => data.json())
+        .then(data => console.log(data))
         .catch(err => console.log(err));
       // const authenticated = await loginAttempt.json();
       // console.log(authenticated);
