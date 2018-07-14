@@ -16,11 +16,17 @@ const cors = require('cors');
 // =======================
 var app         = express();
 const csrfMiddleware = csrf({
-  cookie: true
+  cookie: {
+    secure: true,
+    httpOnly: true,
+    domain: '/',
+    maxAge: 1000*60*60*24,
+    sameSite: true,
+    ignoreMethods: ['GET']
+  },
 });
-var port = process.env.PORT || 8080; // used to create, sign, and verify tokens
+var port = process.env.PORT || 8080;
 mongoose.connect(config.database, { useNewUrlParser: true }); // connect to database
-app.use(cors());
 app.use(cookieParser());
 app.use(csrfMiddleware);
 app.use(bodyParser.urlencoded({ extended: true }));
