@@ -13,26 +13,25 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
   <script>
-    $.get('https://localhost:8080/api', function (data) {
-      console.log(data);
-      $.ajax({
-        url: 'https://localhost:8080/api/authenticate',
-        method: 'POST',
-        beforeSend: function (request) {
-          request.setRequestHeader("csrf-token", data._csrf);
-        },
-        data: {
+    (async () => {
+      const csrf = document.cookie.split(';').filter(c => c.includes('csrf-token'))[0].split('=')[1];
+      const loginAttempt = fetch('/api/authenticate', {
+        method: 'post',
+        body: JSON.stringify({
           email: 'test@gmail.com',
           password: 'test',
+        }),
+        credentials: 'include',
+        headers: {
+          'csrf-token': csrf,
+          'Content-Type': 'x-www-form-urlencoded',
+          'Accept': 'application/json'
         },
-        success: function (data) {
-          console.log(data);
-        },
-        error: function (err) {
-          console.log(err);
-        }
-      });
-    });
+      }).then(data => data.json())
+        .catch(err => console.log(err));
+      // const authenticated = await loginAttempt.json();
+      // console.log(authenticated);
+    })();
   </script>
 </body>
 

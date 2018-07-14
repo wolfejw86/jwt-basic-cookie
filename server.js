@@ -17,10 +17,8 @@ const csrfMiddleware = csrf({
   cookie: {
     secure: true,
     httpOnly: true,
-    domain: '/',
     maxAge: 1000*60*60*24,
     sameSite: true,
-    ignoreMethods: ['GET']
   },
 });
 var port = process.env.PORT || 8080;
@@ -33,12 +31,16 @@ app.use(bodyParser.json());
 // use morgan to log requests to the console
 app.use(morgan('dev'));
 
+app.use(function(req, res, next) {
+  res.cookie('csrf-token', req.csrfToken());
+  next();
+});
 // =======================
 // routes ================
 // =======================
 // basic route
 app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, './public/index.html'));
+  res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 // API ROUTES -------------------
