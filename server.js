@@ -6,11 +6,9 @@ var mongoose    = require('mongoose');
 var path = require('path');
 var csrf = require('csurf');
 var cookieParser = require('cookie-parser');
-var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
 const https = require('https');
 const fs = require('fs');
-const cors = require('cors');
 // =======================
 // configuration =========
 // =======================
