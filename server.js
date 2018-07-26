@@ -1,12 +1,12 @@
 require('dotenv').config();
-var express     = require('express');
-var bodyParser  = require('body-parser');
-var morgan      = require('morgan');
-var mongoose    = require('mongoose');
-var path = require('path');
-var csrf = require('csurf');
-var cookieParser = require('cookie-parser');
-var config = require('./config'); // get our config file
+const express     = require('express');
+const bodyParser  = require('body-parser');
+const morgan      = require('morgan');
+const mongoose    = require('mongoose');
+const path = require('path');
+const csrf = require('csurf');
+const cookieParser = require('cookie-parser');
+const config = require('./config'); // get our config file
 const https = require('https');
 const fs = require('fs');
 // =======================
@@ -31,32 +31,32 @@ app.use(bodyParser.json());
 // use morgan to log requests to the console
 app.use(morgan('dev'));
 
-app.use(function(req, res, next) {
+// this middleware sets the csrf in a cookie, so it is automatically
+// read on subsequent requests - TODO - find out if this is actually secure
+// (not the cookie itself, it's not, but paired with the secure cookie that holds
+// the secret to decode it, I believe it should be)
+app.use((req, res, next) => {
   res.cookie('csrf-token', req.csrfToken());
   next();
 });
-// =======================
-// routes ================
-// =======================
+
 // basic route
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'));
 });
-
-// API ROUTES -------------------
-// we'll get to these in a second
 
 
 app.use('/api', require('./routes/api'))
 // =======================
 // start the server ======
 // =======================
-var options = {
+const options = {
   key: fs.readFileSync('./certs/key.pem'),
   cert: fs.readFileSync('./certs/cert.pem'),
   requestCert: false,
   rejectUnauthorized: false
 };
+// https instead of http to run the secure cookie options locally
 const server = https.createServer(options, app)
 server.listen(port, () => {
   console.log('server running at ' + port)
