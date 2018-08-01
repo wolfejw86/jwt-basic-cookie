@@ -13,9 +13,9 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
   <script>
-    (async () => {
+    (() => {
       const csrf = document.cookie.split(';').filter(c => c.includes('csrf-token'))[0].split('=')[1];
-      const loginAttempt = fetch('/api/authenticate', {
+      fetch('/api/authenticate', {
         method: 'post',
         body: JSON.stringify({
           email: 'test@gmail.com',
@@ -30,8 +30,6 @@
       }).then(data => data.json())
         .then(data => console.log(data))
         .catch(err => console.log(err));
-      // const authenticated = await loginAttempt.json();
-      // console.log(authenticated);
     })();
   </script>
 </body>

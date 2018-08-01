@@ -58,10 +58,10 @@ function verify(req, res, next) {
 }
 
 apiRoutes.get('/user', verify, async (req, res) => {
-  const test = jwt.verify(req.cookies.sid, process.env.JWT_SECRET);
+  // const test = jwt.verify(req.cookies.sid, process.env.JWT_SECRET);
+  var decoded = jwt.decode(req.cookies.sid);
   try {
-    res.json({ users: await User.find({})
-    });
+    res.json({ users: await User.find({}) });
   } catch (err) {
     res.json({ err });
   }
